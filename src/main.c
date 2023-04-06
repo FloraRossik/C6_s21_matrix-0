@@ -1,13 +1,4 @@
-#include <float.h>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef struct matrix_struct {
-  double **matrix;
-  int rows;
-  int columns;
-} matrix_t;
+#include "s21_matrix.h"
 
 typedef struct matrix_struct2 {
   double **matrix;
@@ -61,33 +52,27 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
     result->matrix = (double **)malloc(rows * sizeof(double *));
 
     for (int i = 0; i < rows; i++) {
-        result->matrix[i] = (double *)malloc(columns * sizeof(double));
+      result->matrix[i] = (double *)malloc(columns * sizeof(double));
     }
     if (error == 0) {
-        for (int i = 0; i < rows; i++){
-          if (i != 0)
-              // printf("\n");
-             for (int j = 0; j < columns; j++){
-                result->matrix[i][j] = 6;
-                // printf("%lf  ", result->matrix[i][j]);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++){
+              result->matrix[i][j] = 0;
             }
-          //  printf("\n");
         }
     }
     return error;
   }
 
   void s21_remove_matrix(matrix_t *A) {
-  if (A->matrix)
-  {
-    for (int i = 0; i < A->rows; i++) {
-      // printf("%lf  ", *A->matrix[i]);
-      free(A->matrix[i]);
+    if (A->matrix) {
+      for (int i = 0; i < A->rows; i++) {
+        free(A->matrix[i]);
+      }
+      free(A->matrix);
     }
-    free(A->matrix);
-  }
-  A->rows = 0;
-  A->columns = 0;
+    A->rows = 0;
+    A->columns = 0;
   }
   
   int s21_sum_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
@@ -98,12 +83,10 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
         if (A->rows == B->rows && A->columns == B->columns) 
         {
             error = s21_create_matrix(A->rows, A->columns, result);
-            if (!error) {
+            if (error == 0) {
                 for (int i = 0; i < A->rows; i++) {
-                    // printf("\n");
                     for (int j = 0; j < A->columns; j++) {
-                        result->matrix[i][j] = A->matrix[i][j] + B->matrix[i][j];
-                        // printf("%lf  ", result->matrix[i][j]);
+                      result->matrix[i][j] = A->matrix[i][j] + B->matrix[i][j];
                     }
                 }
             }
@@ -126,10 +109,8 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
             error = s21_create_matrix(A->rows, A->columns, result);
             if (!error) {
                 for (int i = 0; i < A->rows; i++) {
-                    // printf("\n");
                     for (int j = 0; j < A->columns; j++) {
                         result->matrix[i][j] = A->matrix[i][j] - B->matrix[i][j];
-                        // printf("%lf  ", result->matrix[i][j]);
                     }
                 }
             }
@@ -142,6 +123,49 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
     return error;
   }
 
+  int s21_mult_number(matrix_t *A, double number, matrix_t *result) {
+
+    int error = 0;
+
+    if (s21_check_matrix(A)) {
+      error = s21_create_matrix(A->rows, A->columns, result);
+      if (!error) {
+        for (int i = 0; i < A->rows, i++) {
+          for (int j = 0; j < A->columns; j++) {
+            result->matrix[i][j] = number * A->matrix[i][j];
+          }
+        }
+      }
+    }
+    return error;
+  }
+
+  int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
+
+    int error = 0;
+
+    if (s21_check_matrix(A) && s21_check_matrix(B)) {
+        if (A->rows == B->rows && A->columns == B->columns) 
+        {
+            error = s21_create_matrix(A->rows, A->columns, result);
+            if (error == 0) {
+                for (int i = 0; i < A->rows; i++) {
+                    for (int j = 0; j < A->columns; j++) {
+                        result->matrix[i][j] += A->matrix[i][j] * B->matrix[i][j];
+                    }
+                }
+            }
+        } 
+        else
+            error = 1;
+    } else {
+        error = 1;
+    }
+    return error;
+  }
+
+  
+
 int main() {
   
   matrix_t matrix;
@@ -152,7 +176,7 @@ int main() {
   // int **new_buff;
 
   s21_create_matrix(rows, columns, &matrix);
-  s21_sub_matrix(&matrix, &matrix, &matrix);
+  //s21_sub_matrix(&matrix, &matrix, &matrix);
   s21_remove_matrix(&matrix);
 
   return 0;
