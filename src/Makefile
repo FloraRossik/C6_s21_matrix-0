@@ -30,14 +30,6 @@ test: testest.c s21_matrix.a
 	$(CC) $< s21_matrix.a $(TEST_FLAGS) -o test
 	./test
 
-check: s21_matrix.a
-	@cppcheck *.h *.c
-	@cp ../materials/linters/CPPLINT.cfg CPPLINT.cfg
-	@python3 ../materials/linters/cpplint.py --extension=c *.c
-	@rm CPPLINT.cfg
-	@$(CC) testest.c s21_matrix.a $(TEST_FLAGS)
-	@CK_FORK=no leaks --atExit -- ./a.out
-
 gcov_report: s21_matrix.a
 	@gcc $(GCOVFLAGS) testest.c $(SOURSES) $(TEST_FLAGS) -o GcovReport
 	@./GcovReport

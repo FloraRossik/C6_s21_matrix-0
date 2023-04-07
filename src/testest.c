@@ -4,9 +4,8 @@
 #define OK 0
 #include <check.h>
 
-void ck_assert_double_eq_tol (double result, double value1, double value2, int s) {
-
-}
+void ck_assert_double_eq_tol(double result, double value1, double value2,
+                             int s) {}
 
 START_TEST(matrix_test1) {
   matrix_t matrix1, matrix2;
@@ -318,12 +317,6 @@ START_TEST(calc_complements_test) {
 }
 END_TEST
 
-
-
-
-
-
-
 START_TEST(determinant3x3_test) {
   matrix_t matrix1;
   s21_create_matrix(3, 2, &matrix1);
@@ -370,11 +363,6 @@ START_TEST(determinant3x3_test) {
 }
 END_TEST
 
-
-
-
-
-
 START_TEST(determinant4x4_test) {
   matrix_t A;
   s21_create_matrix(4, 4, &A);
@@ -408,12 +396,9 @@ START_TEST(determinant4x4_test) {
   ck_assert_double_eq(determinant_result, determinant_orig);
   ck_assert_int_eq(res, OK);
 
-
   s21_remove_matrix(&A);
 }
 END_TEST
-
-
 
 START_TEST(determinant5x5_test) {
   matrix_t A;
@@ -461,10 +446,6 @@ START_TEST(determinant5x5_test) {
   s21_remove_matrix(&A);
 }
 END_TEST
-
-
-
-
 
 START_TEST(inverse_test) {
   matrix_t A;
